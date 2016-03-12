@@ -19,7 +19,6 @@ let pollingPlaceRequests = {
       .query({"sql": `SELECT PollName, VBM, BT, ID, MailDate, ReturnDate FROM 13cxU5gasxEIZpLSAQqI3l_B_guMrmbHomOFDqq-E where ZipCode='${zip}' and HouseNum='${house}' and BirthDate='${dob}'`})
       .query({key: apikey})
       .end(function(err, res){
-        console.log(err, res)
         if (err || !res.ok) {
           reject(err);
         } else {

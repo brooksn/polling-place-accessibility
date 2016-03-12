@@ -4,6 +4,7 @@ import pollingPlaceRequests from '../actions/pollingPlaceRequests';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import AutoComplete from 'material-ui/lib/auto-complete';
 import TextField from 'material-ui/lib/text-field';
+import RaisedButton from 'material-ui/lib/raised-button';
 
 export default class PollingPlaceForm extends Component {
   constructor(props) {
@@ -27,6 +28,9 @@ export default class PollingPlaceForm extends Component {
       input: {
         display: 'flex',
         flexDirection: 'column',
+      },
+      button: {
+        margin: 12
       }
     }
   }
@@ -77,7 +81,12 @@ export default class PollingPlaceForm extends Component {
               hintText="Date of Birth"
               onChange={(n, date) => this.setState({dob: date})}
             />
-            <input type="submit" value="Submit" onClick={(e)=>this.handleSubmit(e)}/>
+            <RaisedButton 
+              label="Submit" 
+              style={styles.button} 
+              onTouchEnd={()=>this.handleSubmit()}
+              onMouseUp={()=>this.handleSubmit()}
+            />
           </div>
           <p>{caption} {addressLink}</p>
           {map}
@@ -85,10 +94,9 @@ export default class PollingPlaceForm extends Component {
       </div>
     );
   }
-  handleSubmit(event) {
+  handleSubmit() {
     pollingPlaceRequests.voter(this.state.house, this.state.zip, this.state.dob, this.props.fusionkey)
     .then(function(data){
-      console.log(data)
       if (data.MailDate && data.MailDate != '') {
         this.setState({caption: `Your absentee ballot was mailed to this address on ${data.MailDate}. You may still vote at your polling place on election day.`, mailDate: data.MailDate})
       }
