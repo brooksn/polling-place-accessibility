@@ -42,10 +42,28 @@ export default class PollingPlaceForm extends Component {
         <div className="medium-12 columns">
           <h1>Polling Place Form</h1>
           <p>
-            <span>house num: <input type="text" name="house" onChange={this.handleHouseChange.bind(this)}></input></span><br />
-            <span>zip: <input type="text" name="zip" onChange={this.handleZipChange.bind(this)}></input></span><br />
-            <span>date of birth: <input type="text" name="dob" onChange={this.handleDobChange.bind(this)}></input></span><br />
-            <span><input type="submit" value="Submit" onClick={this.handleSubmit.bind(this)}></input></span><br />
+            house num:
+            <input 
+              type="text" 
+              name="house" 
+              onChange={(e)=>this.handleHouseChange(e)}
+              value={this.state.house}
+            />
+            zip: 
+            <input 
+              type="text" 
+              name="zip" 
+              onChange={(e)=>this.handleZipChange(e)}
+              value={this.state.zip}
+            />
+            date of birth: 
+            <input 
+              type="text" 
+              name="dob" 
+              onChange={(e)=>this.handleDobChange(e)}
+              value={this.state.dob}
+            />
+            <input type="submit" value="Submit" onClick={(e)=>this.handleSubmit(e)}/>
           </p>
           <p>{caption} {addressLink}</p>
           {map}
@@ -56,6 +74,7 @@ export default class PollingPlaceForm extends Component {
   handleSubmit(event) {
     pollingPlaceRequests.voter(this.state.house, this.state.zip, this.state.dob, this.props.fusionkey)
     .then(function(data){
+      console.log(data)
       if (data.MailDate && data.MailDate != '') {
         this.setState({caption: `Your absentee ballot was mailed to this address on ${data.MailDate}. You may still vote at your polling place on election day.`, mailDate: data.MailDate})
       }
