@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import pollingPlaceRequests from '../actions/pollingPlaceRequests';
+import DatePicker from 'material-ui/lib/date-picker/date-picker';
+import AutoComplete from 'material-ui/lib/auto-complete';
+import TextField from 'material-ui/lib/text-field';
 
 export default class PollingPlaceForm extends Component {
   constructor(props) {
@@ -15,10 +18,27 @@ export default class PollingPlaceForm extends Component {
       longitude: null,
     };
   }
+
+  getStyles() {
+    return {
+      root: {
+
+      },
+      input: {
+        display: 'flex',
+        flexDirection: 'column',
+      }
+    }
+  }
+
   render() {
     var caption = this.state.caption || this.props.caption;
     var addressLink = this.state.address ? <a href={'http://maps.google.com/?q='+encodeURI(this.state.address)}>➶</a> : null;
     //var map = (this.state.latitude && this.state.longitude) ? <h1>Map!!</h1> : null;
+
+    let styles = this.getStyles()
+    let zipCodes = ['95616','95673','95816','95834','95835','95838'];
+
     if (!this.state.latitude || !this.state.longitude) var map = null;
     else {
       var map = (
@@ -41,30 +61,24 @@ export default class PollingPlaceForm extends Component {
       <div className="polling-place-form row">
         <div className="medium-12 columns">
           <h1>Polling Place Form</h1>
-          <p>
-            house num:
-            <input 
-              type="text" 
-              name="house" 
-              onChange={(e)=>this.handleHouseChange(e)}
-              value={this.state.house}
+          <div style={styles.input}>
+            <TextField
+              hintText="House Number"
+              onChange={(e) => this.setState({house: e.target.value})}
             />
-            zip: 
-            <input 
-              type="text" 
-              name="zip" 
-              onChange={(e)=>this.handleZipChange(e)}
-              value={this.state.zip}
+            <AutoComplete
+              hintText="Zip Code"
+              dataSource={zipCodes}
+              openOnFocus={true}
+              onUpdateInput={(val) => this.setState({zip: val})}
+              onNewRequest={(val) => this.setState({zip: val})}
             />
-            date of birth: 
-            <input 
-              type="text" 
-              name="dob" 
-              onChange={(e)=>this.handleDobChange(e)}
-              value={this.state.dob}
+            <DatePicker 
+              hintText="Date of Birth"
+              onChange={(n, date) => this.setState({dob: date})}
             />
             <input type="submit" value="Submit" onClick={(e)=>this.handleSubmit(e)}/>
-          </p>
+          </div>
           <p>{caption} {addressLink}</p>
           {map}
         </div>
@@ -104,9 +118,6 @@ export default class PollingPlaceForm extends Component {
   }
   handleZipChange(e) {
     this.setState({zip: e.target.value});
-  }
-  handleDobChange(e) {
-    this.setState({dob: e.target.value});
   }
 }
 

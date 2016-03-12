@@ -11,15 +11,7 @@ let pollingPlaceRequests = {
   voter: function(house, zip, date, apikey){
     //takes a house number, zip code, and date of birth as a Date object or in the format: 'MM/DD/YYYY'
     var p = new Promise(function(resolve, reject){
-      var now = new Date();
-      let dob = new Date(date)
-      if (typeof dob.getMonth == 'function') {
-        if (dob.getMonth() > 12 || dob.getMonth() <= 0) reject('Month was out of range: ' + dob.getMonth());
-        if (dob.getDate() >= 32) reject('Date was out of range: ' + dob.getDate());
-        if (dob.getFullYear() > now.getFullYear()-16 || dob.getFullYear() < now.getFullYear()-120) reject('Year was out of range: ' + dob.getFullYear());
-        
-        dob = dob.toLocaleDateString('en-US',{timeZone: 'UTC'})
-      }
+      let dob = date.toLocaleDateString('en-US',{timeZone: 'UTC'})
       var mapResults = pollingPlaceRequests.mapResults;
       
       request
