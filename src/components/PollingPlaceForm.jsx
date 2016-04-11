@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import pollingPlaceRequests from '../actions/pollingPlaceRequests';
+import store from '../stores/pollStore.js';
+import preFetchedPollingPlaces from '../map/preFetchedPollingPlaces.js'
 
 export default class PollingPlaceForm extends Component {
   constructor(props) {
@@ -10,37 +12,18 @@ export default class PollingPlaceForm extends Component {
     // https://www.googleapis.com/fusiontables/v2/query?sql=SELECT%20*%20FROM%201Wps1_Vj4dkNiAIozL47QINAYAhonMgfVf0F3aPyR&key=AIzaSyDRoMwLIG_AcxMeha5PIv9lWnM0AwWRsCM
     super(props);
     this.state = {
+      userPpid: null,
       house: null,
       zip: null,
       dob: null,
       place: null,
-      address: null,
-      latitude: null,
-      longitude: null,
+      address: null
     };
   }
   render() {
     var caption = this.state.caption || this.props.caption;
     var addressLink = this.state.address ? <a href={'http://maps.google.com/?q='+encodeURI(this.state.address)}>➶</a> : null;
-    //var map = (this.state.latitude && this.state.longitude) ? <h1>Map!!</h1> : null;
-    if (!this.state.latitude || !this.state.longitude) var map = null;
-    else {
-      var map = (
-        <div id="map-container">
-          <Map className="full-height" center={[this.state.latitude, this.state.longitude]} zoom={15}>
-            <TileLayer
-              url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            />
-          <Marker position={[this.state.latitude, this.state.longitude]}>
-              <Popup>
-                <span>{this.state.place}</span>
-              </Popup>
-            </Marker>
-          </Map>
-        </div>
-      );
-    }
+  
     return (
       <div className="polling-place-form-row row">
         <div className="medium-12 columns">
@@ -52,7 +35,6 @@ export default class PollingPlaceForm extends Component {
             <input type="submit" value="Submit" onClick={this.handleSubmit.bind(this)}></input>
           </form>
           <p>{caption} {addressLink}</p>
-          {map}
         </div>
       </div>
     );
@@ -60,30 +42,35 @@ export default class PollingPlaceForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
     pollingPlaceRequests.voter(this.state.house, this.state.zip, this.state.dob, this.props.fusionkey)
-    .then(function(data){
+    .then((data) =>{
       if (data.MailDate && data.MailDate != '') {
         this.setState({caption: `Your absentee ballot was mailed to this address on ${data.MailDate}. You may still vote at your polling place on election day.`, mailDate: data.MailDate})
       }
       return data.PollName;
-    }.bind(this))
-    .then(pollingPlaceRequests.place.bind(this))
-    .then(function(place){
+    })
+    .then((pollid) =>{
+      this.setState({userPpid: pollid});
+      store.setPPID(pollid);
+      return pollingPlaceRequests.place(pollid, this.props.fusionkey);
+    })
+    .then((place) => {
+      store.setVals({ppName: place['Polling place'], ppAddress: `${place.Address} ${place.City}, ${this.props.stateAbbr} ${place.Zip}`, ppLat: place.Lat, ppLong: place.Long});
       this.setState({place: place['Polling place'], address: `${place.Address} ${place.City}, ${this.props.stateAbbr} ${place.Zip}`, latitude: place.Lat, longitude: place.Long});
       var caption = '';
       if (this.state.mailDate && this.state.mailDate != '') caption += `Your absentee ballot was mailed to this address on ${this.state.mailDate}. You may still vote at your polling place on election day. `;
       caption += `Your polling place is located at ${place['Polling place']}.`;
-      this.setState({caption: caption});
+      this.setState({caption});
       if (!place.Lat || !place.Long) {
         pollingPlaceRequests.geocode(this.state.address, this.props.mapboxkey, this.props.approxLat, this.props.approxLong)
-        .then(function(result){
+        .then((result) =>{
           this.setState({latitude: result.center[1], longitude: result.center[0]});
-        }.bind(this));
+        });
       }
-    }.bind(this))
-    .catch(function(err){
-      this.setState({caption: `There was an error finding your polling place: ${err}`});
-      this.setState({place: null, address: null});
-    }.bind(this));
+    })
+    .catch((err) => {
+      this.setState({caption: `There was an error finding your polling place.`});
+      this.setState({place: null, address: null, latitude: null, longitude: null, userPpid: null});
+    });
   }
   handleHouseChange(e) {
     this.setState({house: e.target.value});
@@ -101,8 +88,6 @@ PollingPlaceForm.defaultProps = {
   mapboxkey: 'pk.eyJ1IjoiYnJvb2tzbiIsImEiOiJjaWpkbmkzMDEwMDh3dGdra2Y0OHYwbjViIn0.gqY3_NGpI96FuDQ7csaOUw', //geocoding API
   caption: 'Enter your house number, zip code, and date of birth to find your polling place.',
   stateAbbr: 'CA',
-  approxLat: '38.5789777', //geocoding bias
-  approxLong: '-121.4829292', //geocoding bias
   styles: {
     root: {
       height: '10em'

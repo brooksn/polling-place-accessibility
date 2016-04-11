@@ -1,28 +1,24 @@
-[![Stories in Ready](https://badge.waffle.io/abustamam/polling-place-accessibility.png?label=ready&title=Ready)](http://waffle.io/abustamam/polling-place-accessibility)
-
 ## Project Information
 
 ### Project Name
 Polling Place Accessibility App
 
 ### Project Description
-This app is intended to provide a resource for voting persons who need accessibility for voting venues.
+This app is intended to provide a resource for voting persons who have specific needs for voting venues.
 
 ### Team Members
 - Rasheed Bustamam rasheed.bustamam@gmail.com
 - Hans Chun 
 - [Brooks Newberry](https://github.com/brooksn) 
 - Nate Cornell 
-- Aheri Stanford-Asiyo
 
 ### Stakeholder Engagement
 - Courtney Bailey, Voter Registration & Elections
-- Guy Sperry
-- [Include any nonprofits or other stakeholders you engaged in the development your project]
+- Guy Sperry, cool data guy
 
 ### Developer Documentation
 Clone the repo:
-`git clone https://github.com/abustamam/Voting`
+`git clone https://github.com/abustamam/polling-place-accessibility`
 
 Install dependencies:
 `npm install`
@@ -36,5 +32,9 @@ Run the server:
 Open up in your web browser: 
 `localhost:3000`
 
-### Additional Information (optional)
-[Include any additional information that you would like the judges to know about your project]
+Please read [the project wiki](https://github.com/abustamam/polling-place-accessibility/wiki), your questions may be answered there.
+
+### Additional Information
+If we win, we will donate 20% of our earnings to the [American Association of People with Disabilities (AAPD)](http://www.aapd.com/)
+
+Make a donation [here](https://aapd.kindful.com/?campaign=238334)
