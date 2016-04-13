@@ -1,7 +1,7 @@
 {
-  "name": "react-transform-boilerplate",
+  "name": "polling-place-accessibility-app",
   "version": "1.0.0",
-  "description": "A new Webpack boilerplate with hot reloading React components, and error handling on module and component level.",
+  "description": "Application to improve availability of information about polling place features that affect accessibility for voters.",
   "scripts": {
     "clean": "rimraf dist",
     "copy": "cp -r public/* dist && cp index.html dist",
@@ -20,27 +20,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/react-transform-boilerplate.git"
+    "url": "https://github.com/abustamam/polling-place-accessibility.git"
   },
   "keywords": [
     "react",
     "reactjs",
-    "boilerplate",
-    "hot",
-    "reload",
-    "hmr",
-    "live",
-    "edit",
     "webpack",
     "babel",
-    "react-transform"
+    "react-transform",
+    "voting",
+    "polling",
+    "accessibility",
+    "Hack4Sac",
+    "CodeForSacramento"
   ],
-  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
+  "author": "Hack4Sac Voting Accessibility team (http://github.com/abustamam/polling-place-accessibility)",
   "license": "CC0-1.0",
   "bugs": {
-    "url": "https://github.com/gaearon/react-transform-boilerplate/issues"
+    "url": "https://github.com/abustamam/polling-place-accessibility/issues"
   },
-  "homepage": "https://github.com/gaearon/react-transform-boilerplate",
+  "homepage": "https://github.com/abustamam/polling-place-accessibility",
   "devDependencies": {
     "babel-core": "^6.3.15",
     "babel-eslint": "^5.0.0-beta4",
@@ -48,16 +47,20 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.5.0",
     "babel-preset-react-hmre": "^1.0.0",
+    "babel-register": "^6.7.2",
     "cross-env": "^1.0.6",
     "eslint": "^1.10.3",
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-react": "^3.11.3",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.13.3",
+    "file-loader": "^0.8.5",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-gh-pages": "^0.5.4",
     "gulp-load-plugins": "^1.1.0",
     "gulp-sass": "^2.1.0",
+    "image-webpack-loader": "^1.6.3",
     "node-sass": "^3.4.2",
     "rimraf": "^2.4.3",
     "tape": "^4.5.1",
@@ -67,7 +70,10 @@
   },
   "dependencies": {
     "babel-core": "^6.6.5",
+    "join-component": "^1.1.0",
+    "jquery": "^2.2.3",
     "leaflet": "^0.7.7",
+    "lodash": "^4.8.2",
     "lodash.has": "^4.3.0",
     "lodash.set": "^4.1.0",
     "react": "^0.14.7",

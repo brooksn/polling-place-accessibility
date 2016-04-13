@@ -13,16 +13,27 @@ export default class FormMap extends Component {
       placeName: null,
       address: null,
       userLat: null,
-      userLong: null
+      userLong: null,
+      store: store
     };
   }
   render() {
     var map = null;
+    var zoom = null;
     var markers = [];
     var center = [this.props.approxLat, this.props.approxLong];
+
+    const north = [38.721915564, -121.390968136]
+    const east = [38.6648806855, -121.133173599]
+    const south = [38.2571979184, -121.303787278]
+    const west = [38.5026946913, -121.522912009]
+    let bounds = [north, east, south, west]
+
     if (this.state.userLat && this.state.userLong) center = [this.state.userLat, this.state.userLong];
-    if (this.state.latitude && this.state.longitude) {
-      center = [this.state.latitude, this.state.longitude];
+    if (this.state.lat && this.state.long) {
+      zoom = 13;
+      bounds = null;
+      center = [this.state.lat, this.state.long];
       var ppid = this.state.userPpid;
       markers.push(
         <Marker color={this.props.activeColor} key={'marker-'+ppid} ppid={ppid} userPpid={ppid} onLeafletClick={this.handleMarkerClick} position={center}>
@@ -32,10 +43,19 @@ export default class FormMap extends Component {
           </Marker>
       )
     } else {
+      center = null;
+      zoom = null;
       markers = this.allPlaceMarkers();
     }
     map = (
-        <Map className="full-height" center={center} zoom={15}>
+        <Map 
+          zoom={zoom} 
+          center={center} 
+          className="full-height" 
+          bounds={bounds} 
+          style={{height: '100vh'}}
+          scrollWheelZoom={false}
+        >
           <TileLayer
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -62,10 +82,12 @@ export default class FormMap extends Component {
     store.unobserveChanges(this.getStoreState.bind(this));
   }
   getStoreState(o) {
+    console.log('FormMap getStoreState: ');
+    console.log(o);
     this.setState({ppid: o.ppid, lat: o.ppLat, long: o.ppLong, placeName: o.ppName, address: o.ppAddress});
   }
   handleMarkerClick(event) {
-    console.log('marker clicked with ppid: ' + this.options.ppid);
+    console.log('two FormMap marker clicked with ppid: ' + this.options.ppid);
     var markerPpid = parseInt(this.options.ppid || 0);
     var userPpid = parseInt(this.options.userPpid || 0);
     if (markerPpid !== userPpid) {

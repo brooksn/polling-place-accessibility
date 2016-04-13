@@ -31,13 +31,13 @@ var access = function(ppid) {
           grouped[ppid.toString()] = {};
           rows.forEach(function(val, ind, arr){
             let subcategory = val.subcategory || 'root';
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].ppid`, val.ppid);
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].question`, val.question);
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].answer`, val.answer);
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].data`, val.data);
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].comments`, val.comments);
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].category`, val.category);
-            set(grouped[ppStr], `['${val.category}']['${subcategory}']['qid_${val.qid}'].subcategory`, val.subcategory);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].ppid`, val.ppid);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].question`, val.question);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].answer`, val.answer);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].data`, val.data);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].comments`, val.comments);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].category`, val.category);
+            set(grouped[ppStr], `['${val.category}']["${subcategory}"]['qid_${val.qid}'].subcategory`, val.subcategory);
           });
           //console.timeEnd('access-parse-object');
           resolve(grouped);

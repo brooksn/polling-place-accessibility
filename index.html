@@ -7,10 +7,19 @@
     <title>Sacramento Country Poll Locations</title>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <link rel="stylesheet" href="css/app.css">
+    <style>
+      body {
+        margin: 0;
+        overflow-x: hidden;
+      }
+      #root {
+        width: 100%;
+      }
+    </style>
     <script src="bower_components/modernizr-min/dist/modernizr.min.js"></script>
   </head>
   <body>
-    <div class="row full-width header-row">
+    <!-- <div class="row full-width header-row">
       <div class="large-12 columns">
         <div id="header">
           <h1 class="title">Poll Locations</h2>
@@ -25,7 +34,8 @@
     <div class="row full-width">
       <div id="footer">
       </div>
-    </div>
+    </div> -->
+    <div id="root"></div>
     <script src="static/bundle.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/what-input/what-input.js"></script>

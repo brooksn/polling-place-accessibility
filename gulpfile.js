@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var $    = require('gulp-load-plugins')();
+var ghPages = require('gulp-gh-pages');
 
 var sassPaths = [
   'bower_components/foundation-sites/scss',
@@ -18,6 +19,16 @@ gulp.task('sass', function() {
     .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('default', ['sass'], function() {
+gulp.task('images', function() {
+  return gulp.src('src/assets/images/**/*')
+    .pipe(gulp.dest('public/images'))
+})
+
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
+});
+
+gulp.task('default', ['sass', 'images'], function() {
   gulp.watch(['src/assets/scss/**/*.scss'], ['sass']);
 });

@@ -19,7 +19,11 @@ store.setPPID = function(p) {
 };
 store.setVals = function(o) {
   for (var key in o) {
-    if (store.hasOwnProperty(key)) store[key] = o[key];
+    if (store.values.hasOwnProperty(key)) {
+      store.values[key] = o[key];
+    } else {
+      console.log('pollStore values does not include key: ' + key);
+    }
   }
   this.onChange();
 };
